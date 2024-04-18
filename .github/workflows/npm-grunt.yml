@@ -1,28 +1,31 @@
-name: NodeJS with Grunt
+name: Node.js CI/CD
 
 on:
   push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
+    branches:
+      - main
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
-    strategy:
-      matrix:
-        node-version: [14.x, 16.x, 18.x]
-
     steps:
-    - uses: actions/checkout@v3
+      - name: Checkout code
+        uses: actions/checkout@v2
 
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v3
-      with:
-        node-version: ${{ matrix.node-version }}
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14' # Specify the Node.js version you want to use
 
-    - name: Build
-      run: |
-        npm install
-        grunt
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build and test
+        run: npm run build # Adjust this command based on your project setup
+
+      - name: Deploy to server
+        run: |
+          # Replace the following line with your deployment script
+          # Example: scp -r ./dist user@your-server:/path/to/destination
+          echo "Deploying to server..."
